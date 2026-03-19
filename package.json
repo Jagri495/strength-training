@@ -1,0 +1,22 @@
+{
+  "name": "strength-training",
+  "version": "1.0.0",
+  "description": "筋トレメニュー自動生成ツール",
+  "main": "index.js",
+  "scripts": {
+    "generate": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Jagri495/strength-training.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Jagri495/strength-training/issues"
+  },
+  "homepage": "https://github.com/Jagri495/strength-training#readme"
+}
