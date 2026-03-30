@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Muscle Map - Anatomy</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        
+        /* 人体SVGのスタイル */
+        svg { width: 300px; height: auto; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1)); }
+        
+        /* 筋肉パーツの基本設定 */
+        .muscle { fill: #d1d5db; stroke: #fff; stroke-width: 1; transition: 0.3s; cursor: pointer; }
+        
+        /* ホバー時の色（部位ごとに変えることも可能） */
+        .muscle:hover { fill: #3b82f6; }
+        
+        /* 部位名表示パネル */
+        #info-panel { margin-top: 20px; padding: 15px; border-radius: 10px; background: #e8f0fe; min-height: 50px; }
+        .muscle-name { font-size: 24px; font-weight: bold; color: #1e40af; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>筋肉部位マップ</h1>
+    <p>部位にマウスを合わせてください</p>
+
+    <svg viewBox="0 0 200 500">
+        <circle cx="100" cy="40" r="30" fill="#eee" stroke="#ccc" />
+        
+        <path d="M70 100 Q100 90 130 100 L130 140 Q100 150 70 140 Z" class="muscle" data-name="大胸筋 (Chest)" />
+        
+        <rect x="80" y="150" width="40" height="80" rx="5" class="muscle" data-name="腹筋 (Abs)" />
+        
+        <path d="M40 100 Q55 85 70 100 L70 130 Q55 145 40 130 Z" class="muscle" data-name="三角筋 (Shoulders)" />
+        <path d="M130 100 Q145 85 160 100 L160 130 Q145 145 130 130 Z" class="muscle" data-name="三角筋 (Shoulders)" />
+        
+        <rect x="45" y="135" width="20" height="50" rx="10" class="muscle" data-name="上腕二頭筋 (Biceps)" />
+        <rect x="135" y="135" width="20" height="50" rx="10" class="muscle" data-name="上腕二頭筋 (Biceps)" />
+        
+        <path d="M70 240 L95 240 L95 380 L65 380 Z" class="muscle" data-name="大腿四頭筋 (Quads)" />
+        <path d="M105 240 L130 240 L135 380 L105 380 Z" class="muscle" data-name="大腿四頭筋 (Quads)" />
+    </svg>
+
+    <div id="info-panel">
+        <div id="display-name" class="muscle-name">- 部位を選択 -</div>
+    </div>
+</div>
+
+<script>
+    const displayName = document.getElementById('display-name');
+    const muscles = document.querySelectorAll('.muscle');
+
+    muscles.forEach(muscle => {
+        // ホバーした時に名前を出す
+        muscle.addEventListener('mouseenter', () => {
+            displayName.innerText = muscle.getAttribute('data-name');
+        });
+        
+        // 離れたら戻す
+        muscle.addEventListener('mouseleave', () => {
+            displayName.innerText = "- 部位を選択 -";
+        });
+
+        // クリックした時のアクション（将来の拡張用）
+        muscle.addEventListener('click', () => {
+            alert(muscle.getAttribute('data-name') + ' のトレーニングメニューを表示しますか？');
+        });
+    });
+</script>
+
+</body>
+</html>

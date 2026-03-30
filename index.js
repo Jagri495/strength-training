@@ -63,18 +63,31 @@ function getRestTime(exercise) {
   if (exercise.type === "warmup" || exercise.type === "cooldown") return 0;
   return 30; // isolationなど
 }
+const readline = require('readline'); // 入力待ち用のモジュール
 
-// 4. メニュー生成関数
+// ... (exerciseDb と getRestTime はそのまま使用) ...
+
+/**
+ * 1種目あたりの所要時間を計算 (秒)
+ */
+function calculateExDuration(ex) {
+  if (ex.duration) return ex.duration * 60; // ウォームアップ等
+  const rest = getRestTime(ex);
+  // 1セット1分 + 休息時間 で計算
+  return ex.defaultSets * (60 + rest);
+}
+
 function generateWorkout(targetParts, level, targetDuration) {
-  console.log("📋 本日のメニュー生成中...");
-  console.log("-----------------------");
-
   let menu = [];
+  let currentTotalSec = 0;
+  const targetSec = targetDuration * 60;
 
-  // ウォームアップ
-  menu.push(...exerciseDb.warmup.slice(0, 2));
+  // 1. ウォームアップ (約5-7分)
+  const warmups = exerciseDb.warmup.slice(0, 2);
+  menu.push(...warmups);
+  warmups.forEach(ex => currentTotalSec += calculateExDuration(ex));
 
-  // メイン種目の抽出
+  // 2. メイン種目の抽出
   let availableMain = [];
   targetParts.forEach(part => {
     if (exerciseDb.main[part]) {
@@ -87,32 +100,59 @@ function generateWorkout(targetParts, level, targetDuration) {
     }
   });
 
-  // シャッフル & ソート (コンパウンド優先)
+  // ランダムシャッフル
   availableMain.sort(() => Math.random() - 0.5);
+  // コンパウンド優先
   availableMain.sort((a, b) => (a.type === "compound" ? -1 : 1));
 
-  // 時間調整
-  const mainCount = Math.max(2, Math.floor((targetDuration - 15) / 10));
-  menu.push(...availableMain.slice(0, mainCount));
+  // 3. 時間に収まるまで種目を追加
+  for (const ex of availableMain) {
+    const exSec = calculateExDuration(ex);
+    if (currentTotalSec + exSec + (5 * 60) <= targetSec) { // クールダウン分5分を残す
+      menu.push(ex);
+      currentTotalSec += exSec;
+    }
+  }
 
-  // クールダウン
-  menu.push(...exerciseDb.cooldown);
-
-  // 表示
-  console.log(`\n🔥 生成されたメニュー (${level} / ${targetDuration}分)`);
-  console.log(`----------------------------------------------------------`);
-  console.log(` 種目名               | 内容               | 休息(秒)`);
-  console.log(`----------------------------------------------------------`);
+  // 4. クールダウン
+  menu.push(exerciseDb.cooldown[0]);
   
-  menu.forEach((ex, i) => {
-    const detail = ex.defaultReps ? `${ex.defaultSets}セット × ${ex.defaultReps}` : `${ex.duration}分`;
-    const rest = getRestTime(ex);
-    const restDisplay = rest > 0 ? `${rest}s` : "--";
-
-    console.log(`${String(i + 1).padStart(2)}. ${ex.name.padEnd(18)} | ${detail.padEnd(16)} | ${restDisplay}`);
-  });
-  console.log(`----------------------------------------------------------`);
+  return menu;
 }
 
+/**
+ * 対話型インターフェースの実行
+ */
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function askUser() {
+  const menu = generateWorkout(targets, userLevel, duration);
+  
+  console.clear();
+  console.log(`\n🔥 提案メニュー (${userLevel} / 目標:${duration}分)`);
+  console.log(`----------------------------------------------------------`);
+  menu.forEach((ex, i) => {
+    const detail = ex.defaultReps ? `${ex.defaultSets}セット × ${ex.defaultReps}` : `${ex.duration}分`;
+    console.log(`${String(i + 1).padStart(2)}. ${ex.name.padEnd(18)} | ${detail}`);
+  });
+  console.log(`----------------------------------------------------------`);
+  
+  rl.question('👉 このメニューで決定しますか？ (y:決定 / n:再生成 / q:終了): ', (answer) => {
+    if (answer.toLowerCase() === 'y') {
+      console.log('\n💪 よし、トレーニング開始だ！頑張りましょう！\n');
+      rl.close();
+    } else if (answer.toLowerCase() === 'n') {
+      askUser(); // 再帰的に実行して新メニュー作成
+    } else {
+      console.log('\n👋 お疲れ様でした！\n');
+      rl.close();
+    }
+  });
+}
+
+askUser();
 // 実行
 generateWorkout(targets, userLevel, duration);

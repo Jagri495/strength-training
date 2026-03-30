@@ -1,0 +1,54 @@
+body { font-family: sans-serif; background: #f4f7f6; color: #333; }
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+.calendar-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+#calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+#calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.day { padding: 15px; border: 1px solid #eee; text-align: center; cursor: pointer; border-radius: 4px; }
+.day:hover { background: #e0f2f1; }
+.day.today { background: #ff5722; color: white; font-weight: bold; }
+.day.has-log { background: #4caf50; color: white; } /* 記録がある日 */
+#log-section { margin-top: 20px; background: white; padding: 20px; border-radius: 8px; }
+textarea { width: 100%; height: 100px; margin-bottom: 10px; padding: 10px; box-sizing: border-box; }
+.hidden { display: none; }
+button { padding: 10px 20px; cursor: pointer; background: #2196f3; color: white; border: none; border-radius: 4px; }
+/* 前回のスタイルに追加 */
+.day { 
+    position: relative; 
+    min-height: 60px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+.part-badge {
+    font-size: 10px;
+    background: #ff9800;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-top: 5px;
+}
+
+.target-selector { margin-bottom: 15px; }
+#target-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+.chip {
+    padding: 5px 12px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.chip.active {
+    background: #2196f3;
+    color: white;
+    border-color: #2196f3;
+}
+/* 前回のスタイルを維持しつつ、以下を追加・修正 */
+#days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.muscle { fill: #d1d5db; stroke: #fff; cursor: pointer; transition: 0.3s; }
+.muscle:hover { fill: #93c5fd; }
+.muscle.active { fill: #2196f3; } /* 選択中の筋肉の色 */
+
+#human-body { width: 150px; height: auto; margin: 10px 0; }
+.anatomy-section { text-align: center; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+
+.day.selected { border: 2px solid #2196f3; background: #e3f2fd; }

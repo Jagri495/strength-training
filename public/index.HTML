@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Workout Diary with Anatomy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🗓️ Workout Diary</h1>
+        
+        <div class="calendar-container">
+            <div id="calendar-header">
+                <button id="prevMonth">前月</button>
+                <h2 id="monthDisplay"></h2>
+                <button id="nextMonth">次月</button>
+            </div>
+            <div id="calendar-grid">
+                <div class="dow">日</div><div class="dow">月</div><div class="dow">火</div>
+                <div class="dow">水</div><div class="dow">木</div><div class="dow">金</div><div class="dow">土</div>
+            </div>
+            <div id="days-grid"></div> 
+        </div>
+
+        <div id="log-section" class="hidden">
+            <h3 id="selected-date-display">日付を選択</h3>
+            
+            <div class="anatomy-section">
+                <p>鍛えた部位を選択：<span id="display-name" style="font-weight:bold; color:#2196f3;">- 未選択 -</span></p>
+                <svg viewBox="0 0 200 500" id="human-body">
+                    <circle cx="100" cy="40" r="30" fill="#eee" stroke="#ccc" />
+                    <path d="M70 100 Q100 90 130 100 L130 140 Q100 150 70 140 Z" class="muscle" data-name="大胸筋" />
+                    <rect x="80" y="150" width="40" height="80" rx="5" class="muscle" data-name="腹筋" />
+                    <path d="M40 100 Q55 85 70 100 L70 130 Q55 145 40 130 Z" class="muscle" data-name="三角筋" />
+                    <path d="M130 100 Q145 85 160 100 L160 130 Q145 145 130 130 Z" class="muscle" data-name="三角筋" />
+                    <rect x="45" y="135" width="20" height="50" rx="10" class="muscle" data-name="上腕二頭筋" />
+                    <rect x="135" y="135" width="20" height="50" rx="10" class="muscle" data-name="上腕二頭筋" />
+                    <path d="M70 240 L95 240 L95 380 L65 380 Z" class="muscle" data-name="大腿四頭筋" />
+                    <path d="M105 240 L130 240 L135 380 L105 380 Z" class="muscle" data-name="大腿四頭筋" />
+                </svg>
+            </div>
+
+            <!-- <textarea id="workout-note" placeholder="メニュー内容やメモを入力..."></textarea> -->
+            
+            <div class="actions">
+                <button id="save-btn">記録を保存する</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
